@@ -323,10 +323,6 @@ kubectl get svc calculator-app-service
 4. Push to branch: `git push origin feature-name`
 5. Submit a Pull Request
 
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
 ## 🙏 Acknowledgments
 
 - Spring Boot team for the excellent framework
