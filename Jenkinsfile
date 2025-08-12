@@ -9,7 +9,7 @@ pipeline {
     stages {
         stage('Git Checkout') {
             steps {
-                git branch: 'devsecops', url: 'https://github.com/ManojKRISHNAPPA/Project-movie-app.git'
+                git branch: 'main', url: 'https://github.com/ManojKRISHNAPPA/Calulator-springboot.git'
             }
         }
 
