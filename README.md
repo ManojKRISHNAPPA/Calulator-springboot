@@ -1,5 +1,5 @@
 # 🧮 Spring Boot Calculator with Modern UI
-
+# 👨‍🎤 Author: ManojKrishnappa 
 ![Calculator Demo](https://img.shields.io/badge/Spring%20Boot-3.3.0-brightgreen)
 ![Java](https://img.shields.io/badge/Java-17-orange)
 ![Docker](https://img.shields.io/badge/Docker-Ready-blue)
@@ -338,5 +338,3 @@ If you have any questions or issues, please:
 3. Create a new issue with detailed information
 
 ---
-
-**Happy Calculating! 🧮✨**
