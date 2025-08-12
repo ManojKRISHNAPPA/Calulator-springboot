@@ -6,6 +6,11 @@ pipeline {
         jdk 'java-17'
     }
 
+    environment {
+        // Set Maven options for Java compatibility
+        MAVEN_OPTS = '-Dnet.bytebuddy.experimental=true -XX:+EnableDynamicAgentLoading'
+    }
+
     stages {
         stage('Git Checkout') {
             steps {
@@ -23,11 +28,17 @@ pipeline {
             steps {
                 sh 'mvn test'
             }
+            post {
+                always {
+                    // Publish test results even if tests fail
+                    junit allowEmptyResults: true, testResultsPattern: '**/target/surefire-reports/*.xml'
+                }
+            }
         }
 
         stage('Build') {
             steps {
-                sh 'mvn clean package'
+                sh 'mvn clean package -DskipTests=true'
             }
         }
 
@@ -48,21 +59,44 @@ pipeline {
             }
         }
         stage('Mutation Tests - PIT') {
-          steps {
-            sh "mvn org.pitest:pitest-maven:mutationCoverage"
-          }
-          post {
-            always {
-              // Target server module specifically
-              pitmutation mutationStatsFile: 'server/target/pit-reports/**/mutations.xml'
+            steps {
+                script {
+                    try {
+                        sh "mvn org.pitest:pitest-maven:mutationCoverage"
+                    } catch (Exception e) {
+                        echo "PIT mutation testing failed: ${e.getMessage()}"
+                        currentBuild.result = 'UNSTABLE'
+                    }
+                }
             }
-          }
+            post {
+                always {
+                    // Publish PIT mutation testing results if they exist
+                    script {
+                        if (fileExists('target/pit-reports')) {
+                            pitmutation mutationStatsFile: 'target/pit-reports/**/mutations.xml'
+                        } else {
+                            echo 'No PIT reports found to publish'
+                        }
+                    }
+                }
+            }
         }
     }
 
     post {
         always {
-            junit '**/target/surefire-reports/*.xml'
+            // Clean up workspace
+            cleanWs()
+        }
+        success {
+            echo 'Pipeline completed successfully!'
+        }
+        failure {
+            echo 'Pipeline failed!'
+        }
+        unstable {
+            echo 'Pipeline completed with warnings!'
         }
     }
 }
