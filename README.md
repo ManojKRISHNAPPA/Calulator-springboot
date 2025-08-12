@@ -73,7 +73,7 @@ java -jar target/calculator-app-0.0.1-SNAPSHOT.jar
 ```bash
 # Build and run with Docker
 docker build -t calculator-app .
-docker run -p 8080:8080 calculator-app
+docker run -p 8081:8081 calculator-app
 
 # Or use Docker Compose
 docker-compose up
@@ -88,7 +88,7 @@ kubectl apply -f Deployment.yaml
 kubectl get pods -l app=calculator-app
 
 # Access via port-forward
-kubectl port-forward service/calculator-app-service 8080:80
+kubectl port-forward service/calculator-app-service 8081:80
 ```
 
 ## 🌐 Access the Application
@@ -273,7 +273,7 @@ logging.level.com.example.calculator=INFO
 java -version
 
 # Check port availability
-lsof -i :8080
+lsof -i :8081
 
 # Check logs
 tail -f logs/application.log
