@@ -1,3 +1,5 @@
+package com.example.calculator.service;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -41,6 +43,6 @@ public class CalculatorServiceTest {
 
     @Test
     public void testDivideByZero() {
-        assertThrows(ArithmeticException.class, () -> calculatorService.divide(1.0, 0.0));
+        assertThrows(IllegalArgumentException.class, () -> calculatorService.divide(1.0, 0.0));
     }
 }
