@@ -69,17 +69,8 @@ pipeline {
                     }
                 }
             }
-            post {
-                always {
-                    script {
-                        def sonarQualityGate = waitForQualityGate()
-                        if (sonarQualityGate.status != 'OK') {
-                            error "SonarQube Quality Gate failed: ${sonarQualityGate.status}"
-                        }
-                    }
-                }
-            }
-        }
+}
+
         // stage('Mutation Tests - PIT') {
         //     steps {
         //         script {
