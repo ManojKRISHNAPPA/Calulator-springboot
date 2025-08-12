@@ -3,7 +3,7 @@ pipeline {
 
     tools {
         maven 'maven'
-        jdk 'java-17'
+        // jdk 'java-17'
     }
 
     environment {
@@ -54,6 +54,30 @@ pipeline {
                     sourcePattern: '**/src/main/java',
                     inclusionPattern: '**/*.class'
                 )
+            }
+        }
+        stage('SonarQube Analysis') {
+            steps {
+                script {
+                    withSonarQubeEnv('SonarQube') {
+                        sh """
+                            mvn sonar:sonar \
+                            -Dsonar.projectKey=devsecops \
+                            -Dsonar.host.url=http://3.92.231.206:9000 \
+                            -Dsonar.login=441102fab89b2aa1803e8e901b6bb7d49f12be48
+                        """
+                    }
+                }
+            }
+            post {
+                always {
+                    script {
+                        def sonarQualityGate = waitForQualityGate()
+                        if (sonarQualityGate.status != 'OK') {
+                            error "SonarQube Quality Gate failed: ${sonarQualityGate.status}"
+                        }
+                    }
+                }
             }
         }
         // stage('Mutation Tests - PIT') {
