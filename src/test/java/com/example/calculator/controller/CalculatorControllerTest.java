@@ -1,3 +1,5 @@
+package com.example.calculator.controller;
+
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -40,7 +42,7 @@ public class CalculatorControllerTest {
 
         when(calculatorService.add(5, 3)).thenReturn(8.0);
 
-        mockMvc.perform(post("/add")
+        mockMvc.perform(post("/api/calculator/add")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"a\":5,\"b\":3}"))
                 .andExpect(status().isOk())
@@ -55,7 +57,7 @@ public class CalculatorControllerTest {
 
         when(calculatorService.subtract(5, 3)).thenReturn(2.0);
 
-        mockMvc.perform(post("/subtract")
+        mockMvc.perform(post("/api/calculator/subtract")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"a\":5,\"b\":3}"))
                 .andExpect(status().isOk())
@@ -70,7 +72,7 @@ public class CalculatorControllerTest {
 
         when(calculatorService.multiply(5, 3)).thenReturn(15.0);
 
-        mockMvc.perform(post("/multiply")
+        mockMvc.perform(post("/api/calculator/multiply")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"a\":5,\"b\":3}"))
                 .andExpect(status().isOk())
@@ -85,7 +87,7 @@ public class CalculatorControllerTest {
 
         when(calculatorService.divide(6, 3)).thenReturn(2.0);
 
-        mockMvc.perform(post("/divide")
+        mockMvc.perform(post("/api/calculator/divide")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"a\":6,\"b\":3}"))
                 .andExpect(status().isOk())
@@ -98,12 +100,12 @@ public class CalculatorControllerTest {
         request.setA(6);
         request.setB(0);
 
-        when(calculatorService.divide(6, 0)).thenThrow(new ArithmeticException("Division by zero"));
+        when(calculatorService.divide(6, 0)).thenThrow(new IllegalArgumentException("Division by zero is not allowed."));
 
-        mockMvc.perform(post("/divide")
+        mockMvc.perform(post("/api/calculator/divide")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"a\":6,\"b\":0}"))
                 .andExpect(status().isBadRequest())
-                .andExpect(content().string("Division by zero"));
+                .andExpect(content().string("Division by zero is not allowed."));
     }
 }

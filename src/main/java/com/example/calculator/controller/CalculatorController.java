@@ -3,6 +3,7 @@ package com.example.calculator.controller;
 import com.example.calculator.model.CalculationRequest;
 import com.example.calculator.service.CalculatorService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,8 +37,12 @@ public class CalculatorController {
     }
 
     @PostMapping("/divide")
-    public ResponseEntity<Double> divide(@RequestBody CalculationRequest request) {
-        double result = calculatorService.divide(request.getA(), request.getB());
-        return ResponseEntity.ok(result);
+    public ResponseEntity<?> divide(@RequestBody CalculationRequest request) {
+        try {
+            double result = calculatorService.divide(request.getA(), request.getB());
+            return ResponseEntity.ok(result);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }
