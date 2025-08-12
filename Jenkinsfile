@@ -22,6 +22,7 @@ pipeline {
                 sh 'mvn compile'
             }
         }
+
         stage('Unit Test') {
             steps {
                 sh 'mvn test'
@@ -32,7 +33,6 @@ pipeline {
                 }
             }
         }
-
 
         stage('Build') {
             steps {
@@ -56,6 +56,7 @@ pipeline {
                 )
             }
         }
+
         stage('SonarQube Analysis') {
             steps {
                 script {
@@ -67,6 +68,14 @@ pipeline {
                             -Dsonar.login=441102fab89b2aa1803e8e901b6bb7d49f12be48
                         """
                     }
+                }
+            }
+        }
+
+        stage('SonarQube Quality Gate') {
+            steps {
+                timeout(time: 2, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
                 }
             }
         }
@@ -84,7 +93,6 @@ pipeline {
         //     }
         //     post {
         //         always {
-        //             // Publish PIT mutation testing results if they exist
         //             script {
         //                 if (fileExists('target/pit-reports')) {
         //                     pitmutation mutationStatsFile: 'target/pit-reports/**/mutations.xml'
@@ -95,12 +103,10 @@ pipeline {
         //         }
         //     }
         // }
-        
     }
 
     post {
         always {
-            // Clean up workspace
             cleanWs()
         }
         success {
