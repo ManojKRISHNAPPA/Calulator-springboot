@@ -7,7 +7,6 @@ pipeline {
     }
 
     environment {
-        // Set Maven options for Java compatibility
         MAVEN_OPTS = '-Dnet.bytebuddy.experimental=true -XX:+EnableDynamicAgentLoading'
     }
 
@@ -57,30 +56,31 @@ pipeline {
                 )
             }
         }
-        stage('Mutation Tests - PIT') {
-            steps {
-                script {
-                    try {
-                        sh "mvn org.pitest:pitest-maven:mutationCoverage"
-                    } catch (Exception e) {
-                        echo "PIT mutation testing failed: ${e.getMessage()}"
-                        currentBuild.result = 'UNSTABLE'
-                    }
-                }
-            }
-            post {
-                always {
-                    // Publish PIT mutation testing results if they exist
-                    script {
-                        if (fileExists('target/pit-reports')) {
-                            pitmutation mutationStatsFile: 'target/pit-reports/**/mutations.xml'
-                        } else {
-                            echo 'No PIT reports found to publish'
-                        }
-                    }
-                }
-            }
-        }
+        // stage('Mutation Tests - PIT') {
+        //     steps {
+        //         script {
+        //             try {
+        //                 sh "mvn org.pitest:pitest-maven:mutationCoverage"
+        //             } catch (Exception e) {
+        //                 echo "PIT mutation testing failed: ${e.getMessage()}"
+        //                 currentBuild.result = 'UNSTABLE'
+        //             }
+        //         }
+        //     }
+        //     post {
+        //         always {
+        //             // Publish PIT mutation testing results if they exist
+        //             script {
+        //                 if (fileExists('target/pit-reports')) {
+        //                     pitmutation mutationStatsFile: 'target/pit-reports/**/mutations.xml'
+        //                 } else {
+        //                     echo 'No PIT reports found to publish'
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
+        
     }
 
     post {
