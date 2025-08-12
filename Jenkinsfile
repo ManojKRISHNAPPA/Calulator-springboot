@@ -23,18 +23,17 @@ pipeline {
                 sh 'mvn compile'
             }
         }
-
         stage('Unit Test') {
             steps {
                 sh 'mvn test'
             }
             post {
                 always {
-                    // Publish test results even if tests fail
-                    junit allowEmptyResults: true, testResultsPattern: '**/target/surefire-reports/*.xml'
+                    junit allowEmptyResults: true, testResults: '**/target/surefire-reports/*.xml'
                 }
             }
         }
+
 
         stage('Build') {
             steps {
