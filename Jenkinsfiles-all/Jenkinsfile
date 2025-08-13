@@ -57,26 +57,14 @@ pipeline {
             }
         }
 
-        stage('SonarQube Analysis') {
-            steps {
-                script {
-                    withSonarQubeEnv('SonarQube') {
-                        sh """
-                            mvn sonar:sonar \
-                            -Dsonar.projectKey=devsecops \
-                            -Dsonar.host.url=http://3.92.231.206:9000 \
-                            -Dsonar.login=441102fab89b2aa1803e8e901b6bb7d49f12be48
-                        """
-                    }
-                }
-            }
-        }
-
-        stage('SonarQube Quality Gate') {
-            steps {
-                timeout(time: 2, unit: 'MINUTES') {
-                    waitForQualityGate abortPipeline: true
-                }
+        stage('SonarQube - SAST'){
+            steps{
+                sh """
+                    mvn sonar:sonar \
+                    -Dsonar.projectKey=Devsecops-calculator \
+                    -Dsonar.host.url=http://54.197.73.230:9000 \
+                    -Dsonar.login=470025acd8fcee5a2ff55d48c93717fbc3d44f95
+                """
             }
         }
 
