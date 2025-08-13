@@ -41,5 +41,16 @@ pipeline{
             }
         }
 
+        stage('Publish code coverage report'){
+            steps{
+                sh 'mvn jacoco:report'
+            }
+            post {
+                always {
+                    jacoco execPattern: '**/target/jacoco.exec', classPattern: '**/target/classes', sourcePattern: '**/src/main/java', exclusionPattern: '', changeBuildStatus: true
+                }
+            }
+        }
+
     }
 }
