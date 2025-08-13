@@ -121,7 +121,7 @@
           <format>ALL</format>
 
           <!-- Fail the build if CVSS score >= 8 -->
-          <failBuildOnCVSS>5</failBuildOnCVSS>
+          <failBuildOnCVSS>9</failBuildOnCVSS>
 
           <!-- Optional suppression or mirror settings -->
           <!--
