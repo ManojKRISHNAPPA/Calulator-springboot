@@ -1,6 +1,10 @@
 #!/bin/bash
 
-dockerImageName=$(awk 'NR==1 {print $2}' Dockerfile)
+dockerImageName=$(grep -m1 '^FROM' Dockerfile | awk '{print $2}')
+if [[ -z "$dockerImageName" ]]; then
+    echo "Error: Docker image name not found in Dockerfile."
+    exit 1
+fi
 echo "Scanning image: $dockerImageName"
 
 # High severity scan
