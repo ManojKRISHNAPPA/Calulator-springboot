@@ -52,5 +52,16 @@ pipeline{
             }
         }
 
+        stage('SonarQube - SAST'){
+            steps{
+                sh """
+                    mvn sonar:sonar \
+                    -Dsonar.projectKey=Devsecops-calculator \
+                    -Dsonar.host.url=http://54.197.73.230:9000 \
+                    -Dsonar.login=470025acd8fcee5a2ff55d48c93717fbc3d44f95
+                """
+            }
+        }
+
     }
 }
