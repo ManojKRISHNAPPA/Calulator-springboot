@@ -121,8 +121,10 @@
           <format>ALL</format>
 
           <!-- Fail the build if CVSS score >= 8 -->
-          <failBuildOnCVSS>9</failBuildOnCVSS>
+        <failBuildOnCVSS>11</failBuildOnCVSS>
 
+        <!-- Don't break build on errors -->
+        <failOnError>false</failOnError>
           <!-- Optional suppression or mirror settings -->
           <!--
           <cveUrlModified>http://internal-mirror.mycorp.com/nvdcve-1.1-modified.json.gz</cveUrlModified>

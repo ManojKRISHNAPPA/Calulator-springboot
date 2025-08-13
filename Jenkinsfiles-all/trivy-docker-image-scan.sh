@@ -3,16 +3,11 @@
 dockerImageName=$(awk 'NR==1 {print $2}' Dockerfile)
 echo "Scanning image: $dockerImageName"
 
-TRIVY_IMAGE="aquasec/trivy:0.65.0"
+# High severity scan
+trivy image --exit-code 0 --severity HIGH $dockerImageName
 
-
-docker run --rm \
-  -v $WORKSPACE:/root/.cache/ \
-  $TRIVY_IMAGE image --exit-code 0 --severity HIGH $dockerImageName
-
-docker run --rm \
-  -v $WORKSPACE:/root/.cache/ \
-  $TRIVY_IMAGE image --exit-code 1 --severity CRITICAL $dockerImageName
+# Critical severity scan (fail if found)
+trivy image --exit-code 1 --severity CRITICAL $dockerImageName
 
 exit_code=$?
 echo "Exit Code : $exit_code"
