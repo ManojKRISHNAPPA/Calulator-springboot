@@ -81,7 +81,19 @@ pipeline{
                     waitForQualityGate abortPipeline: true
                 }
             }
+        }
+
+        stage('Vaulnerabilties scan - docker'){
+            steps{
+                sh 'mvn dependency-check:check'
+            }
+            post {
+                always {
+                    dependencyCheckPublisher pattern: '**/target/dependency-check-report.xml'
+                }
+            }
         }        
+
 
     }
 }
