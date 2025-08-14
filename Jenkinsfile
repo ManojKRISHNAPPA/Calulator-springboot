@@ -52,36 +52,36 @@ pipeline{
             }
         }
 
-        stage('SonarQube - SAST'){
-            steps{
-                sh """
-                    mvn sonar:sonar \
-                    -Dsonar.projectKey=devsecops \
-                    -Dsonar.host.url=http://98.82.36.59:9000 \
-                    -Dsonar.login=70d24dd452b85812ebd8d8ebdeab4d40b6b9f892
-                """
-            }
-        }
-
-        // stage('build && SonarQube analysis') {
-        //     steps {
-        //         withSonarQubeEnv('SonarQube') {
-        //             // Optionally use a Maven environment you've configured already
-        
-        //                 sh 'mvn clean package org.sonarsource.scanner.maven:sonar-maven-plugin:sonar'
-                    
-        //         }
+        // stage('SonarQube - SAST'){
+        //     steps{
+        //         sh """
+        //             mvn sonar:sonar \
+        //             -Dsonar.projectKey=devsecops \
+        //             -Dsonar.host.url=http://98.82.36.59:9000 \
+        //             -Dsonar.login=70d24dd452b85812ebd8d8ebdeab4d40b6b9f892
+        //         """
         //     }
         // }
-        // stage("Quality Gate") {
-        //     steps {
-        //         timeout(time: 2, unit: 'MINUTES') {
-        //             // Parameter indicates whether to set pipeline to UNSTABLE if Quality Gate fails
-        //             // true = set pipeline to UNSTABLE, false = don't
-        //             waitForQualityGate abortPipeline: true
-        //         }
-        //     }
-        // }        
+
+        stage('build && SonarQube analysis') {
+            steps {
+                withSonarQubeEnv('SonarQube') {
+                    // Optionally use a Maven environment you've configured already
+        
+                        sh 'mvn clean package org.sonarsource.scanner.maven:sonar-maven-plugin:sonar'
+                    
+                }
+            }
+        }
+        stage("Quality Gate") {
+            steps {
+                timeout(time: 2, unit: 'MINUTES') {
+                    // Parameter indicates whether to set pipeline to UNSTABLE if Quality Gate fails
+                    // true = set pipeline to UNSTABLE, false = don't
+                    waitForQualityGate abortPipeline: true
+                }
+            }
+        }        
 
     }
 }
