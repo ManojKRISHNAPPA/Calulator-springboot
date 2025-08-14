@@ -38,6 +38,18 @@ pipeline{
                 sh 'mvn clean package -DskipTests=true'
             }
         }
+
+        stage('Generate Jacoco report') {
+            steps {
+                sh 'mvn jacoco:report'
+            }
+        }
+
+        stage('Publish Jacoco report') {
+            steps {
+                jacoco execPattern: '**/target/jacoco.exec', classPattern: '**/target/classes', sourcePattern: '**/src/main/java', exclusionPattern: '', changeBuildStatus: true
+            }
+        }
     
     
     }   
