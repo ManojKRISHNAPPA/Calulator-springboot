@@ -1,0 +1,25 @@
+pipeline{
+    agent any
+
+    tools {
+        jdk 'java-17'
+        maven 'maven'
+    }
+
+    environment {
+        MAVEN_OPTS = '-Dnet.bytebuddy.experimental=true -XX:+EnableDynamicAgentLoading'
+    }
+    stages{
+        stage('Git Checkout') {
+            steps {
+                git branch: 'main', url: 'https://github.com/ManojKRISHNAPPA/Calulator-springboot.git'
+            }
+        }
+
+        stage('compile'){
+            steps {
+                sh 'mvn clean compile'
+            }
+        }
+    }
+}
