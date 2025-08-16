@@ -50,6 +50,17 @@ pipeline{
                 jacoco execPattern: '**/target/jacoco.exec', classPattern: '**/target/classes', sourcePattern: '**/src/main/java', exclusionPattern: '', changeBuildStatus: true
             }
         }
+
+        stage('SonarQube - SAST'){
+            steps{
+                sh """
+                    mvn sonar:sonar \
+                    -Dsonar.projectKey=devsecops-calculator-project \
+                    -Dsonar.host.url=http://3.91.180.162:9000 \
+                    -Dsonar.login=2c9f32f18bb780589404f6d01b6924787ea468b3
+                """
+            }
+        }       
     
     
     }   
