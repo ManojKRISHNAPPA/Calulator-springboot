@@ -81,7 +81,7 @@ pipeline{
             }
         }
 
-        stage('Vulnarabilties scan'){
+        stage('Vulnarabilties scan-OWASP'){
             steps {
                 sh 'mvn dependency-check:check'
             }
