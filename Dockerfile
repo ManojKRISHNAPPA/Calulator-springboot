@@ -14,8 +14,6 @@ COPY src ./src
 
 RUN mvn clean package -DskipTests
 
-USER root
-
 EXPOSE 8081
 
 CMD ["java", "-jar", "target/calculator-app-0.0.1-SNAPSHOT.jar"]
