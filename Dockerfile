@@ -1,16 +1,5 @@
-FROM openjdk:8-jdk-buster
-
-WORKDIR /app
-
-RUN apt-get update && \
-    apt-get install -y maven curl git && \
-    rm -rf /var/lib/apt/lists/*
-
-COPY pom.xml .
-COPY src ./src
-
-RUN mvn clean package -DskipTests
-
+FROM openjdk:8-jdk-alpine
 EXPOSE 8081
-
-CMD ["java", "-jar", "target/calculator-app-0.0.1-SNAPSHOT.jar"]
+ARG JAR_FILE=target/*.jar
+ADD ${JAR_FILE} app.jar
+ENTRYPOINT ["java","-jar","/app.jar"]
