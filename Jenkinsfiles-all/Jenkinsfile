@@ -57,16 +57,37 @@ pipeline {
             }
         }
 
-        stage('SonarQube - SAST'){
-            steps{
-                sh """
-                    mvn sonar:sonar \
-                    -Dsonar.projectKey=devsecops \
-                    -Dsonar.host.url=http://3.87.0.156:9000 \
-                    -Dsonar.login=9ca5ed2eac276f7ce529e3e68bf624bf4e8196ee
-                """
+        // stage('SonarQube - SAST'){
+        //     steps{
+        //         sh """
+        //             mvn sonar:sonar \
+        //             -Dsonar.projectKey=devsecops \
+        //             -Dsonar.host.url=http://3.87.0.156:9000 \
+        //             -Dsonar.login=9ca5ed2eac276f7ce529e3e68bf624bf4e8196ee
+        //         """
+        //     }
+        // }
+
+        stage('build && SonarQube analysis') {
+            steps {
+                withSonarQubeEnv('SonarQube') {
+                    // Optionally use a Maven environment you've configured already
+        
+                        sh 'mvn clean package org.sonarsource.scanner.maven:sonar-maven-plugin:sonar'
+                    
+                }
             }
         }
+        stage("Quality Gate") {
+            steps {
+                timeout(time: 2, unit: 'MINUTES') {
+                    // Parameter indicates whether to set pipeline to UNSTABLE if Quality Gate fails
+                    // true = set pipeline to UNSTABLE, false = don't
+                    waitForQualityGate abortPipeline: true
+                }
+            }
+        }
+        
         stage('Vulnerability Scan - Docker ') {
             steps {
                 sh "mvn dependency-check:check"
