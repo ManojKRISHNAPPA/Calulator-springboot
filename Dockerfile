@@ -1,12 +1,9 @@
-
-FROM openjdk:8-jdk-stretch
+FROM openjdk:8-jdk-buster
 
 WORKDIR /app
 
 RUN apt-get update && \
-    apt-get install -y maven=3.6.0-1 \
-    curl=7.52.1-5+deb9u12 \
-    git && \
+    apt-get install -y maven curl git && \
     rm -rf /var/lib/apt/lists/*
 
 COPY pom.xml .
