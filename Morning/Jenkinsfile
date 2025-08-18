@@ -94,7 +94,7 @@ pipeline{
                     },
                     "OPA Conftest": {
                         sh 'docker run --rm -v $(pwd):/project openpolicyagent/conftest test --policy dockerfile-security.rego Dockerfile'
-                    }
+                    },
                     postBuild: {
                         // Archive the scan report
                         archiveArtifacts artifacts: 'target/dependency-check-report.html', allowEmptyArchive: true
