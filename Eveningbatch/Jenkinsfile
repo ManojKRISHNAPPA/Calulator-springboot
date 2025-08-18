@@ -82,12 +82,17 @@ pipeline{
         }
 
         stage('Vulnarabilties scan-OWASP'){
-            steps {
-                sh 'mvn dependency-check:check'
-            }
-            post {
-                always {
-                    dependencyCheckPublisher pattern: '**/target/dependency-check-report.xml'
+            parallel {
+                stage('Dependency Check') {
+                    steps {
+                        sh 'mvn org.owasp:dependency-check-maven:check -Dformat=ALL'
+                    }
+                }
+
+                stage('Trivy base image scan') {
+                    steps {
+                        sh 'bash trivy-docker-image-scan.sh'
+                    }
                 }
             }
         }
