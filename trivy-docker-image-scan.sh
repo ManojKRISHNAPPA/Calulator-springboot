@@ -1,6 +1,7 @@
 #!/bin/bash
 
 dockerImageName=$(grep -m1 '^FROM' Dockerfile | awk '{print $2}')
+
 if [[ -z "$dockerImageName" ]]; then
     echo "Error: Docker image name not found in Dockerfile."
     exit 1
@@ -22,3 +23,4 @@ if [[ "${exit_code}" == 1 ]]; then
 else
     echo "Image scanning passed. No CRITICAL vulnerabilities found"
 fi
+
