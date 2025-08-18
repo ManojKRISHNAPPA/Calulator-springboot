@@ -83,23 +83,29 @@ pipeline{
             }
         }
 
+
         stage('Vulnerability Scan - Docker') {
-            steps {
-                parallel(
-                    "Dependency Scan": {
+            parallel {
+                stage("Dependency Scan") {
+                    steps {
                         sh "mvn dependency-check:check"
-                    },
-                    "Trivy Scan": {
-                        sh "bash trivy-docker-image-scan.sh"
-                    },
-                    "OPA Conftest": {
-                        sh 'docker run --rm -v /var/lib/jenkins/workspace/Calculator-app:/project openpolicyagent/conftest test --policy dockerfile-security.rego Dockerfile'
-                    },
-                    postBuild: {
-                        // Archive the scan report
-                        archiveArtifacts artifacts: 'target/dependency-check-report.html', allowEmptyArchive: true
                     }
-                )
+                }
+                stage("Trivy Scan") {
+                    steps {
+                        sh "bash trivy-docker-image-scan.sh"
+                    }
+                }
+                stage("OPA Conftest") {
+                    steps {
+                        sh 'docker run --rm -v $(pwd):/project openpolicyagent/conftest test --policy dockerfile-security.rego Dockerfile'
+                    }
+                }
+            }
+            post {
+                always {
+                    archiveArtifacts artifacts: 'target/dependency-check-report.html', allowEmptyArchive: true
+                }
             }
         }
 
