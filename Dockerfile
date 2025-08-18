@@ -1,5 +1,5 @@
 # Intentionally use an older Java 17 base image
-FROM openjdk:8-jdk-alpine
+FROM eclipse-temurin:17-jdk
 EXPOSE 8081
 ARG JAR_FILE=target/*.jar
 ADD ${JAR_FILE} app.jar
