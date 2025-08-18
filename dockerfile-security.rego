@@ -7,7 +7,7 @@ deny[msg] {
     input[i].Cmd == "env"
     val := input[i].Value
     some s
-    secrets_env[s]
+    s := secrets_env[_]
     contains(lower(val), s)
     msg = sprintf("Line %d: Potential secret in ENV key found: %s", [i, val])
 }
