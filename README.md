@@ -39,8 +39,8 @@ curl -L https://raw.githubusercontent.com/istio/istio/release-1.25/samples/addon
 
 kubectl apply -f istio-addons/prometheus.yaml
 kubectl apply -f istio-addons/grafana.yaml
-kubectl apply -f istio-addons/kiali.yaml
 kubectl apply -f istio-addons/jaeger.yaml
+kubectl apply -f https://raw.githubusercontent.com/istio/istio/release-1.27/samples/addons/kiali.yaml
 ```
 
 ## Create ecommerce namespace and enable istio-injection
