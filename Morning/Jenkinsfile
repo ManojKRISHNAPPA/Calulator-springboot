@@ -147,6 +147,7 @@ pipeline{
                             serverUrl: 'https://AF682864FCC4679EC4B430CB3613E722.gr7.us-east-1.eks.amazonaws.com'
                         ) {
                             sh "kubectl get pods -n microdegree"
+                            sh "sed -i 's#replace#manojkrishnappa/calculator-app:${GIT_COMMIT}#g' Deployment.yml"
                             sh "kubectl apply -f Deployment.yml -n microdegree"
                         }
                     }
