@@ -16,7 +16,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>3.3.6</version>
+    <version>3.5.4</version>
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
 
@@ -25,6 +25,8 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <java.version>17</java.version>           <!-- Keep Java 17 or change to 1.8 if needed -->
+    <!-- Override Tomcat version to fix CVE-2025-24813 -->
+    <tomcat.version>10.1.35</tomcat.version>
   </properties>
 
   <dependencies>
