@@ -9,6 +9,7 @@ spec:
   selector:
     matchLabels:
       app: devsecops
+  strategy: {}
   template:
     metadata:
       labels:
@@ -17,9 +18,6 @@ spec:
       containers:
       - image: replace
         name: devsecops-container
-        securityContext:
-          runAsNonRoot: true
-          runAsUser: 1001
 ---
 apiVersion: v1
 kind: Service
