@@ -4,8 +4,8 @@
 
 # using kubesec v2 api
 scan_result=$(curl -sSX POST --data-binary @"Deployment.yml" https://v2.kubesec.io/scan)
-scan_message=$(curl -sSX POST --data-binary @"Deployment.yml.yaml" https://v2.kubesec.io/scan | jq .[0].message -r ) 
-scan_score=$(curl -sSX POST --data-binary @"Deployment.yml.yaml" https://v2.kubesec.io/scan | jq .[0].score ) 
+scan_message=$(curl -sSX POST --data-binary @"Deployment.yml" https://v2.kubesec.io/scan | jq .[0].message -r ) 
+scan_score=$(curl -sSX POST --data-binary @"Deployment.yml" https://v2.kubesec.io/scan | jq .[0].score ) 
 
 
 # using kubesec docker image for scanning
