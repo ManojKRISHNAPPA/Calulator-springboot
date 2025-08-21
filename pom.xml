@@ -25,7 +25,12 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <java.version>17</java.version>           <!-- Keep Java 17 or change to 1.8 if needed -->
-    <tomcat.version>9.0.43</tomcat.version>  <!-- Tomcat version property -->
+    <!-- <tomcat.version>9.0.43</tomcat.version> -->
+    <tomcat.version>9.0.99</tomcat.version>  <!-- Tomcat version property - Updated to fix CVE-2025-24813 -->
+    <!-- Override Spring Boot's managed Tomcat versions -->
+    <tomcat-embed-core.version>9.0.99</tomcat-embed-core.version>
+    <tomcat-embed-el.version>9.0.99</tomcat-embed-el.version>
+    <tomcat-embed-websocket.version>9.0.99</tomcat-embed-websocket.version>
   </properties>
 
   <dependencies>
