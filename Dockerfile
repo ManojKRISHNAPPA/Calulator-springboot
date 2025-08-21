@@ -14,8 +14,9 @@ RUN mvn clean package -DskipTests
 FROM eclipse-temurin:17-jdk
 
 # Create a non-root user
-RUN addgroup -g 1001 -S appuser && \
-    adduser -u 1001 -S appuser -G appuser
+RUN addgroup -g 1001 appuser && \
+    adduser -u 1001 appuser -g appuser -m -s /bin/bash && \
+    chown -R appuser:appuser /app
 
 USER appuser
 

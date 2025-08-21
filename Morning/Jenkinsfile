@@ -133,23 +133,43 @@ pipeline{
             }
         }
         
-        stage('Deploy To Kubernetes') {
-            steps {
-                withKubeConfig(caCertificate: '', clusterName: 'microdegree-cluster', contextName: '', credentialsId: 'kube', namespace: 'microdegree', restrictKubeConfigAccess: false, serverUrl: 'https://AF682864FCC4679EC4B430CB3613E722.gr7.us-east-1.eks.amazonaws.com') {
-                    sh "kubectl get pods -n microdegree"
-                    sh "kubectl apply -f Deployment.yml -n microdegree"
+        stage('Deploy and Verify in Parallel') {
+            parallel {
+                stage('Deploy To Kubernetes') {
+                    steps {
+                        withKubeConfig(
+                            caCertificate: '',
+                            clusterName: 'microdegree-cluster',
+                            contextName: '',
+                            credentialsId: 'kube',
+                            namespace: 'microdegree',
+                            restrictKubeConfigAccess: false,
+                            serverUrl: 'https://AF682864FCC4679EC4B430CB3613E722.gr7.us-east-1.eks.amazonaws.com'
+                        ) {
+                            sh "kubectl get pods -n microdegree"
+                            sh "kubectl apply -f Deployment.yml -n microdegree"
+                        }
+                    }
+                }
+
+                stage('Verify the Deployment') {
+                    steps {
+                        withKubeConfig(
+                            caCertificate: '',
+                            clusterName: 'microdegree-cluster',
+                            contextName: '',
+                            credentialsId: 'kube',
+                            namespace: 'microdegree',
+                            restrictKubeConfigAccess: false,
+                            serverUrl: 'https://AF682864FCC4679EC4B430CB3613E722.gr7.us-east-1.eks.amazonaws.com'
+                        ) {
+                            sh "kubectl get pods -n microdegree"
+                            sh "kubectl get svc -n microdegree"
+                        }
+                    }
                 }
             }
         }
-
-        stage('Verify the Deployment') {
-            steps {
-                withKubeConfig(caCertificate: '', clusterName: 'microdegree-cluster', contextName: '', credentialsId: 'kube', namespace: 'microdegree', restrictKubeConfigAccess: false, serverUrl: 'https://AF682864FCC4679EC4B430CB3613E722.gr7.us-east-1.eks.amazonaws.com') {
-                    sh "kubectl get pods -n microdegree"
-                    sh "kubectl get svc -n microdegree"
-                }
-            }
-         }
 
 
     }
