@@ -8,6 +8,10 @@ pipeline {
 
     environment {
         MAVEN_OPTS = '-Dnet.bytebuddy.experimental=true -XX:+EnableDynamicAgentLoading'
+        deploymentName = "devsecops"
+        containerName = "devsecops-container"
+        serviceName = "devsecops-svc"
+        imageName = "manojkrishnappa/calculator-app:${GIT_COMMIT}"
     }
 
     stages {
@@ -127,6 +131,20 @@ pipeline {
                 }
             }
         }
+
+        stage('Vulnerability Scan - Kubernetes') {
+            steps {
+                parallel(
+                "OPA Scan": {
+                    sh 'docker run --rm -v $(pwd):/project openpolicyagent/conftest test --policy opa-k8s-security.rego Deployment.yml'
+                },
+                "Kubesec Scan": {
+                    sh "bash kubesec-scan.sh"
+                }
+                )
+            }
+        }
+
 
         // stage('Mutation Tests - PIT') {
         //     steps {

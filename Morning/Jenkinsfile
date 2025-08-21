@@ -8,6 +8,12 @@ pipeline{
 
     environment {
         MAVEN_OPTS = '-Dnet.bytebuddy.experimental=true -XX:+EnableDynamicAgentLoading'
+        AWS_REGION = "us-east-1"
+        CLUSTER_NAME = "microdegree-cluster"
+        deploymentName = "devsecops"
+        containerName = "devsecops-container"
+        serviceName = "devsecops-svc"
+        imageName = "manojkrishnappa/calculator-app:${GIT_COMMIT}"
     }
 
     stages{
@@ -118,6 +124,33 @@ pipeline{
                 }
             }
         }
+
+        stage('Updating the Cluster') {
+            steps {
+                script {
+                    sh "aws eks update-kubeconfig --region ${AWS_REGION} --name ${CLUSTER_NAME}"
+                }
+            }
+        }
+        
+        stage('Deploy To Kubernetes') {
+            steps {
+                withKubeConfig(caCertificate: '', clusterName: 'microdegree-cluster', contextName: '', credentialsId: 'kube', namespace: 'microdegree', restrictKubeConfigAccess: false, serverUrl: 'https://AF682864FCC4679EC4B430CB3613E722.gr7.us-east-1.eks.amazonaws.com') {
+                    sh "kubectl get pods -n microdegree"
+                    sh "kubectl apply -f Deployment.yml -n microdegree"
+                }
+            }
+        }
+
+        stage('Verify the Deployment') {
+            steps {
+                withKubeConfig(caCertificate: '', clusterName: 'microdegree-cluster', contextName: '', credentialsId: 'kube', namespace: 'microdegree', restrictKubeConfigAccess: false, serverUrl: 'https://AF682864FCC4679EC4B430CB3613E722.gr7.us-east-1.eks.amazonaws.com') {
+                    sh "kubectl get pods -n microdegree"
+                    sh "kubectl get svc -n microdegree"
+                }
+            }
+         }
+
 
     }
 }
