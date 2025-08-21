@@ -87,6 +87,9 @@
             --add-opens java.naming/javax.naming.spi=ALL-UNNAMED
             --add-opens java.rmi/sun.rmi.transport=ALL-UNNAMED
           </jvmArguments>
+          <systemPropertyVariables>
+            <spring.profiles.active>default</spring.profiles.active>
+          </systemPropertyVariables>
         </configuration>
       </plugin>
 
