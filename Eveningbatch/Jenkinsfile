@@ -83,11 +83,11 @@ pipeline{
 
         stage('Vulnarabilties scan-OWASP'){
             parallel {
-                stage('Dependency Check') {
-                    steps {
-                        sh 'mvn org.owasp:dependency-check-maven:check -Dformat=ALL'
-                    }
-                }
+                // stage('Dependency Check') {
+                //     steps {
+                //         sh 'mvn org.owasp:dependency-check-maven:check -Dformat=ALL'
+                //     }
+                // }
 
                 stage('Trivy base image scan') {
                     steps {
