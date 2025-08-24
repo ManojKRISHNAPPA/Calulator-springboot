@@ -14,7 +14,7 @@ spec:
       labels:
         app: devsecops
     spec:
-      serviceAccountName: jenkins
+      serviceAccountName: default
       securityContext:
         runAsNonRoot: true
         fsGroup: 2000
