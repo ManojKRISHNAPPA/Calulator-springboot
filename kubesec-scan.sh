@@ -1,27 +1,22 @@
 #!/bin/bash
 
-#kubesec-scan.sh
+# kubesec-scan.sh
 
-# using kubesec v2 api
+# Call kubesec once and store result
 scan_result=$(curl -sSX POST --data-binary @"Deployment.yml" https://v2.kubesec.io/scan)
-scan_message=$(curl -sSX POST --data-binary @"Deployment.yml" https://v2.kubesec.io/scan | jq .[0].message -r ) 
-scan_score=$(curl -sSX POST --data-binary @"Deployment.yml" https://v2.kubesec.io/scan | jq .[0].score ) 
 
+# Extract score and message
+scan_message=$(echo "$scan_result" | jq -r '.[0].message')
+scan_score=$(echo "$scan_result" | jq '.[0].score')
 
-# using kubesec docker image for scanning
-# scan_result=$(docker run -i kubesec/kubesec:512c5e0 scan /dev/stdin < Deployment.yml)
-# scan_message=$(docker run -i kubesec/kubesec:512c5e0 scan /dev/stdin < Deployment.yml | jq .[].message -r)
-# scan_score=$(docker run -i kubesec/kubesec:512c5e0 scan /dev/stdin < Deployment.yml | jq .[].score)
+# Show score
+echo "Scan Score : $scan_score"
 
-	
-    # Kubesec scan result processing
-    # echo "Scan Score : $scan_score"
-
-	if [[ "${scan_score}" -le 5 ]]; then
-	    echo "Score is $scan_score"
-	    echo "Kubesec Scan $scan_message"
-	else
-	    echo "Score is $scan_score, which is less than or equal to 5."
-	    echo "Scanning Kubernetes Resource has Failed"
-	    exit 1;
-	fi;
+# Kubesec scan result processing
+if [[ "$scan_score" -le 5 ]]; then
+    echo "Kubesec Scan Failed: $scan_message"
+    exit 1
+else
+    echo "Kubesec Scan Passed: $scan_message"
+    exit 0
+fi
